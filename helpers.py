@@ -52,12 +52,12 @@ def get_file_names(netcdf_base_path, start_date, end_date, domain, time_interval
 
     return files
 
-def extract_tiff_from_var(netcdf_base_path, start_date, end_date, var_name):
+def extract_tiff_from_var(netcdf_base_path, start_date, end_date, var_name, temp_dir):
     domains = ['d01', 'd02', 'd03']
     for d in domains:
         file_names = get_file_names(
-            path.join(netcdf_base_path, d ),
+            path.join(path.join(netcdf_base_path, d ), d),
             start_date, end_date, d
         )
         for file in file_names:
-            readVars(file, var_name)
+            readVars(file, var_name, temp_dir)
