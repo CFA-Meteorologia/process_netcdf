@@ -1,3 +1,8 @@
+Purpose
+
+These scripts are meant to be run after a run of WRF is finished in order to fill
+databases of the app for management of WRF runs and geoserver layers.
+
 Installation guide
 
 * install pydev as it is said here https://realpython.com/intro-to-pyenv/
