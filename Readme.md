@@ -8,6 +8,7 @@ Installation guide
     1. ```pyenv local process_netcdf```
     1. ```pip install GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')```
     1. ```pip install python-dev-tools```
+    1. ```pip install -r requirements.txt```
 
 
 
