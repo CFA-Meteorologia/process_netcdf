@@ -15,5 +15,6 @@ databases of the app for management of WRF runs and geoserver layers.
     1. ```pip install python-dev-tools```
     1. ```pip install -r requirements.txt```
 
-
-
+#Docs for integration with geoserver
+https://pypi.org/project/geoserver-restconfig/
+https://gis.stackexchange.com/questions/211717/geoserver-imagemosaic-creation-through-rest-api-with-postgis-granule-indexing
