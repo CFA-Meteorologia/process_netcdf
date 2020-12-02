@@ -15,6 +15,7 @@ click-plugins==1.1.1
 cligj==0.7.1
 coverage==5.3
 darglint==1.5.8
+dict-deep==4.1.2
 distlib==0.3.1
 doc8==0.8.1
 docutils==0.16

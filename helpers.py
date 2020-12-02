@@ -1,11 +1,13 @@
 from netCDF4 import Dataset
 from wrf import getvar, geo_bounds
 from os import path, access, makedirs, F_OK
-from datetime import datetime, timedelta
+from datetime import timedelta
 import rasterio
+from config import get_config
 
 
-def readVars(netcdfFilePath, varName, outputDir='./temp'):
+def readVars(netcdfFilePath, varName):
+    outputDir = get_config('temp_dir')
     v = getvar(Dataset(netcdfFilePath), varName)
 
     bounds = geo_bounds(v)
@@ -52,12 +54,14 @@ def get_file_names(netcdf_base_path, start_date, end_date, domain, time_interval
 
     return files
 
-def extract_tiff_from_var(netcdf_base_path, start_date, end_date, var_name, temp_dir):
+def extract_tiff_from_var(start_date, end_date, var_name):
     domains = ['d01', 'd02', 'd03']
+    netcdf_base_path = get_config('data_dir')
+
     for d in domains:
         file_names = get_file_names(
-            path.join(path.join(netcdf_base_path, d ), d),
+            path.join(path.join(netcdf_base_path, d), d),
             start_date, end_date, d
         )
         for file in file_names:
-            readVars(file, var_name, temp_dir)
+            readVars(file, var_name)
