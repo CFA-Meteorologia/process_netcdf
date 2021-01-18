@@ -125,7 +125,7 @@ def update_geoserver_layer(start_date, end_date, var_name, domain, geoserver):
     zip_directory(output_dir, zip_path)
 
     if store is None:
-        geoserver.create_imagemosaic(store_name, zip_path, workspace=workspace_name)
+        store = geoserver.create_imagemosaic(store_name, zip_path, workspace=workspace_name)
         geoserver.reload()
         layer = geoserver.create_wmslayer(workspace_name, store, layer_name)
     else:
