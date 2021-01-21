@@ -34,7 +34,7 @@ def read_vars(netcdf_file_path, var_name):
     output_path = path.join(output_dir, f'{path.basename(netcdf_file_path)}.tif')
 
     # 'gdal_translate -of Gtiff -a_ullr -106.47828674316406 44.88469696044922 -93.026123046875 37.8767204284668 -a_srs '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs' NETCDF:wrfout_d01_2007-06-01:QFX output.tiff'
-    s = f'gdal_translate -of Gtiff -a_srs \'+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs\' NETCDF:{netcdf_file_path}.nc:{var_name} {output_path}'
+    s = f'gdalwarp -t_srs \'+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs\' NETCDF:{netcdf_file_path}:{var_name} {output_path}'
     os.system(s)
 
     # with rasterio.open(
