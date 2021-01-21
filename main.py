@@ -34,6 +34,6 @@ update_geoserver_layer(
     datetime.fromisoformat('2020-07-06 00:00:00'),
     datetime.fromisoformat('2020-07-07 00:00:00'),
     'T2',
-    'd01',
+    'd03',
     geoserver,
 )

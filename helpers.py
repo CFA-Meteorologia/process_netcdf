@@ -3,6 +3,7 @@ from wrf import getvar, geo_bounds
 from os import path, makedirs, listdir
 from datetime import timedelta
 import rasterio
+import os
 from config import get_config
 from zipfile import ZipFile
 
@@ -30,18 +31,24 @@ def read_vars(netcdf_file_path, var_name):
     except:
         pass
 
-    with rasterio.open(
-            path.join(output_dir, f'{path.basename(netcdf_file_path)}.tif'),
-            'w',
-            driver='GTiff',
-            height=height,
-            width=width,
-            count=1,
-            dtype=v.dtype,
-            crs=4326,
-            transform=transform
-    ) as dst:
-        dst.write(v.values[::-1], 1)
+    output_path = path.join(output_dir, f'{path.basename(netcdf_file_path)}.tif')
+
+    # 'gdal_translate -of Gtiff -a_ullr -106.47828674316406 44.88469696044922 -93.026123046875 37.8767204284668 -a_srs '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs' NETCDF:wrfout_d01_2007-06-01:QFX output.tiff'
+    s = f'gdal_translate -of Gtiff -a_srs \'+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs\' NETCDF:{netcdf_file_path}:{var_name} {output_path}'
+    os.system(s)
+
+    # with rasterio.open(
+    #         ,
+    #         'w',
+    #         driver='GTiff',
+    #         height=height,
+    #         width=width,
+    #         count=1,
+    #         dtype=v.dtype,
+    #         crs=4326,
+    #         transform=transform
+    # ) as dst:
+    #     dst.write(v.values[::-1], 1)
 
 
 def get_file_names(netcdf_base_path, start_date, end_date, domain, time_interval=timedelta(hours=3)):
@@ -97,8 +104,8 @@ def zip_directory(directory, zip_path):
 def update_geoserver_layer(start_date, end_date, var_name, domain, geoserver):
     workspace_name = get_config('geoserver.workspace')
     output_dir = get_config('temp_dir')
-    store_name = f'{var_name}_{domain}'
-    layer_name = f'{store_name}_WMS'
+    store_name = f'{var_name}_{domain}t1'
+    layer_name = f'{store_name}_WMSt1'
     zip_path = path.join(output_dir, 'zip/data.zip')
     makedirs(path.dirname(zip_path))
 
