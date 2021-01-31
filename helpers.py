@@ -5,6 +5,7 @@ from datetime import timedelta
 from config import get_config
 from serializer import to_serializable
 import json
+import pika
 
 
 def read_var(netcdf_file_path, var_name):
@@ -68,5 +69,8 @@ def send_new_variables(start_date, end_date, var_name, domain, rabbit_mq_channel
                 "domain": domain,
                 "date": file['date'],
                 "var": var_name
-            }, default=to_serializable)
+            }, default=to_serializable),
+            properties=pika.BasicProperties(
+                delivery_mode=2,  # make message persistent
+            )
         )
