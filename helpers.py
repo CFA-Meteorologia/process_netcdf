@@ -9,8 +9,8 @@ import pika
 from Variables import Variables
 
 
-def read_var(netcdf_file_path, var_name):
-    data_getter = Variables(Dataset(netcdf_file_path))
+def read_var(netcdf_file, var_name):
+    data_getter = Variables(netcdf_file)
     v = data_getter.get_var(var_name)
 
     bounds = geo_bounds(v)
@@ -50,16 +50,30 @@ def get_file_names(netcdf_base_path, start_date, end_date, domain, time_interval
 
     return files
 
-def send_new_variables(start_date, end_date, var_name, domain, rabbit_mq_channel):
+
+def send_new_variables(start_date, end_date, rabbit_mq_channel):
     netcdf_base_path = get_config('data_dir')
 
-    file_names = get_file_names(
-        path.join(path.join(netcdf_base_path, domain), domain),
-        start_date, end_date, domain
-    )
+    domains = get_config('domains')
 
-    for file in file_names:
-        var = read_var(file['path'], var_name)
+    for domain in domains:
+        domain = f'd0{domain}'
+        file_names = get_file_names(
+            path.join(path.join(netcdf_base_path, domain), domain),
+            start_date, end_date, domain
+        )
+        for file in file_names:
+            process_netcdf_file(file['path'], rabbit_mq_channel, domain, file['date'])
+
+
+def process_netcdf_file(file_path, rabbit_mq_channel, domain, date):
+
+    variable_names = get_config('variables')
+
+    file = Dataset(file_path)
+
+    for var_name in variable_names:
+        var = read_var(file, var_name)
 
         rabbit_mq_channel.basic_publish(
             exchange=get_config('rabbitmq.exchange'),
@@ -69,7 +83,7 @@ def send_new_variables(start_date, end_date, var_name, domain, rabbit_mq_channel
                 "data": var['data'],
                 "projection": var['projection'],
                 "domain": domain,
-                "date": file['date'],
+                "date": date,
                 "var": var_name
             }, default=to_serializable),
             properties=pika.BasicProperties(

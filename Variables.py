@@ -1,4 +1,5 @@
-import wrf
+from wrf import getvar
+import numpy as np
 
 
 class Variables:
@@ -11,8 +12,22 @@ class Variables:
         if hasattr(self, var_name) and callable(func := getattr(self, var_name)):
             return func()
         else:
-            return wrf.getvar(self.data, var_name)
+            return getvar(self.data, var_name)
 
     def T2(self):
-        t2_data = wrf.getvar(self.data, 'T2')
+        t2_data = getvar(self.data, 'T2')
         return t2_data - 273.15
+
+    def V(self):
+        v10 = getvar(self.data, 'V10')
+        u10 = getvar(self.data, 'U10')
+        return np.sqrt(u10*u10+v10*v10)
+    
+    def slp(self):
+        return getvar(self.data, "slp")
+
+    def rh2(self):
+        return getvar(self.data, 'rh2')
+
+    def mdbz(self):
+        return getvar(self.data, 'mdbz')

@@ -6,3 +6,17 @@ rabbitmq:
   username: 'rabbit-mq'
   pass: 'rabbit-mq'
   exchange: 'var-data'
+
+variables:
+  - 'T2'
+  - 'mdbz'
+  - 'slp'
+  - 'V'
+  - 'v10'
+  - 'u10'
+  - 'rh2'
+
+domains:
+  - '1'
+  - '2'
+  - '3'

@@ -19,8 +19,6 @@ rabbit_mq_channel = connection.channel()
 send_new_variables(
     datetime.fromisoformat('2020-07-06 00:00:00'),
     datetime.fromisoformat('2020-07-07 00:00:00'),
-    'T2',
-    'd01',
     rabbit_mq_channel,
 )
 
