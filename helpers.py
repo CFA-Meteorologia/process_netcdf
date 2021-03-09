@@ -6,10 +6,12 @@ from config import get_config
 from serializer import to_serializable
 import json
 import pika
+from Variables import Variables
 
 
 def read_var(netcdf_file_path, var_name):
-    v = getvar(Dataset(netcdf_file_path), var_name)
+    data_getter = Variables(Dataset(netcdf_file_path))
+    v = data_getter.get_var(var_name)
 
     bounds = geo_bounds(v)
     bottom_left = bounds.bottom_left
