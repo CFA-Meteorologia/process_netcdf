@@ -38,6 +38,9 @@ def get_file_names(netcdf_base_path, start_date, end_date, domain, time_interval
     current_date = start_date
     files = []
 
+    if domain == 'd03':
+        time_interval = timedelta(hours=1)
+
     while current_date <= end_date:
         formatted_date = current_date.strftime('%Y-%m-%d_%H:%M:%S')
         files.append(
@@ -67,7 +70,6 @@ def send_new_variables(start_date, end_date, rabbit_mq_channel):
 
 
 def process_netcdf_file(file_path, rabbit_mq_channel, domain, date):
-
     variable_names = get_config('variables')
 
     file = Dataset(file_path)
