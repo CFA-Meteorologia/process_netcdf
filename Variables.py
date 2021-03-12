@@ -14,7 +14,7 @@ class Variables:
         else:
             return getvar(self.data, var_name)
 
-    def T2(self, h):
+    def T2(self, h=None):
         t2_data = getvar(self.data, 'T2')
         return t2_data - 273.15
 
@@ -22,7 +22,7 @@ class Variables:
         v10 = getvar(self.data, 'V10')
         u10 = getvar(self.data, 'U10')
         return np.sqrt(u10*u10+v10*v10) * 3.6
-    
+
     def slp(self):
         return getvar(self.data, "slp")
 
